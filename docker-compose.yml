@@ -25,8 +25,9 @@ services:
       dockerfile: Dockerfile
     container_name: openwa-api
     restart: unless-stopped
+    # Port exposed for Dokploy's Traefik to route traffic
     ports:
-      - '127.0.0.1:${API_PORT:-2785}:2785'
+      - '${API_PORT:-2785}:2785'
     expose:
       - '2785'
     networks:
@@ -73,6 +74,8 @@ services:
       - PLUGINS_DIR=/app/data/plugins
       # Security
       - API_MASTER_KEY=${API_MASTER_KEY:-}
+      # CORS - allow dashboard domain
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
     volumes:
       - openwa-data:/app/data
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -105,9 +108,15 @@ services:
     build:
       context: ./dashboard
       dockerfile: Dockerfile.traefik
+      args:
+        # Bake the public API URL into the React bundle at build time
+        VITE_API_URL: ${VITE_API_URL:-}
     container_name: openwa-dashboard
     profiles: ['with-dashboard', 'full']
     restart: unless-stopped
+    # Port exposed for Dokploy's Traefik to route traffic
+    ports:
+      - '${DASHBOARD_PORT:-2886}:80'
     expose:
       - '80'
     networks:
