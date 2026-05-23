@@ -105,9 +105,6 @@ services:
     build:
       context: ./dashboard
       dockerfile: Dockerfile.traefik
-      args:
-        # Bake the public API URL into the React bundle at build time
-        VITE_API_URL: ${VITE_API_URL:-}
     container_name: openwa-dashboard
     profiles: ['with-dashboard', 'full']
     restart: unless-stopped
