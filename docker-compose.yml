@@ -25,9 +25,6 @@ services:
       dockerfile: Dockerfile
     container_name: openwa-api
     restart: unless-stopped
-    # Port exposed for Dokploy's Traefik to route traffic
-    ports:
-      - '${API_PORT:-2785}:2785'
     expose:
       - '2785'
     networks:
@@ -114,9 +111,6 @@ services:
     container_name: openwa-dashboard
     profiles: ['with-dashboard', 'full']
     restart: unless-stopped
-    # Port exposed for Dokploy's Traefik to route traffic
-    ports:
-      - '${DASHBOARD_PORT:-2886}:80'
     expose:
       - '80'
     networks:
