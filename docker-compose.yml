@@ -29,6 +29,9 @@ services:
       - '127.0.0.1:${API_PORT:-2785}:2785'
     expose:
       - '2785'
+    networks:
+      - default
+      - dokploy-network
     environment:
       # Core
       - NODE_ENV=${NODE_ENV:-production}
@@ -107,6 +110,9 @@ services:
     restart: unless-stopped
     expose:
       - '80'
+    networks:
+      - default
+      - dokploy-network
     depends_on:
       - openwa-api
     labels:
@@ -189,3 +195,5 @@ volumes:
 networks:
   default:
     name: openwa-network
+  dokploy-network:
+    external: true
